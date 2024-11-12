@@ -1,0 +1,44 @@
+{
+  "name": "cookup-backend",
+  "version": "1.0.0",
+  "description": "API Node com Express para o Backend do 2 Semestre de 2024 (3 Modulo) IFSP",
+  "main": "src/server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --env-file=.env --watch src/server.js",
+    "prisma:pull": "npx prisma db pull --schema=./prisma/schema-production.prisma",
+    "prisma:push": "npx prisma db push --schema=./prisma/schema-production.prisma",
+    "prisma:generate": "npx prisma generate --schema=./prisma/schema-production.prisma",
+    "prisma:local:pull": "npx prisma db pull --schema=./prisma/schema-local.prisma",
+    "prisma:local:push": "npx prisma db push --schema=./prisma/schema-local.prisma",
+    "prisma:local:generate": "npx prisma generate --schema=./prisma/schema-local.prisma",
+    "prisma:local:studio": "npx prisma studio --schema=./prisma/schema-local.prisma"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Guibs27/frontend-react-native.git"
+  },
+  "keywords": [
+    "api",
+    "express",
+    "zod",
+    "mvc"
+  ],
+  "author": "Guilherme Bizerra, Gabriel Kiss",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Guibs27/frontend-react-native/issues"
+  },
+  "homepage": "https://github.com/Guibs27/frontend-react-native#readme",
+  "dependencies": {
+    "@prisma/client": "^5.22.0",
+    "bcrypt": "^5.1.1",
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "prisma": "^5.22.0",
+    "uuid": "^10.0.0",
+    "zod": "^3.23.8"
+  }
+}
