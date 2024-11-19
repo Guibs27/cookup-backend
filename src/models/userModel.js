@@ -37,7 +37,12 @@ const accountSchema = z.object({
             required_error: "A senha é obrigatória"
         })
         .min(6, {message: "A senha deve ter ao menos 6 caracter"})
-        .max(500, {message: "A senha deve ter no máximo 500 caracteres"})
+        .max(500, {message: "A senha deve ter no máximo 500 caracteres"}),
+    birth_date: z.string({
+            invalid_type_error: "A data de nascimento deve ser um string aaaa-mm-dd",
+            required_error: "A data de nascimento e obrigatoria"
+        })
+        
 })
 
 export const userValidateToCreate = (account) => {
@@ -46,7 +51,7 @@ export const userValidateToCreate = (account) => {
 }
 
 export const userValidateToLogin = (account) => {
-    const partialAccountSchema = accountSchema.partial({id: true, public_id: true, avatar: true, name: true})
+    const partialAccountSchema = accountSchema.partial({id: true, public_id: true, avatar: true, name: true, birth_date: true})
     return partialAccountSchema.safeParse(account)
 }
 

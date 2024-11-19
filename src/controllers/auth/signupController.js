@@ -7,6 +7,7 @@ const signup = async (req, res, next) => {
         const newUser = req.body
 
         const userValidated = userValidateToCreate(newUser)
+        console.log(newUser)
 
         if(userValidated?.error)
             return res.status(401).json({
@@ -16,7 +17,9 @@ const signup = async (req, res, next) => {
 
             userValidated.data.public_id = uuid()
             userValidated.data.pass = bcrypt.hashSync(userValidated.data.pass, 10)
+            userValidated.data.birth_date = new Date(userValidated.data.birth_date)
 
+        console.log(userValidated.data)
         const result = await signUp(userValidated.data)
 
         if(!result)
