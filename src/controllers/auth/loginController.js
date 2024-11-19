@@ -3,6 +3,7 @@ import { createSession } from "../../models/sessionModel.js"
 import jwt from 'jsonwebtoken'
 import bcrypt from "bcrypt"
 import { SECRET_KEY } from "../../config.js"
+import dayjs from 'dayjs'
 
 const login = async (req, res, next) => {
     try{
@@ -50,7 +51,7 @@ const login = async (req, res, next) => {
                 name: user.name,
                 avatar: user.avatar,
                 email: user.email,
-                birth_date: user.birth_date
+                birth_date: dayjs(user.birth_date).format("DD/MM/YYYY")
             }
         })
         
