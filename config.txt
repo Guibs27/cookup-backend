@@ -1,0 +1,19 @@
+--- Configuração para rodar o backend ---
+
+1. Baixar as dependencias locais:
+# npm i
+
+2. Sincronizar banco local com o schema do prisma:
+# npm run prisma:local:push
+
+3. Gerar o Client:
+# npm run prisma:local:generate
+
+4. Criar o arquivo ".env" na raiz e adicionar a seguinte configuração:
+
+ENVIRONMENT=local
+PORT=3000
+HOST=http://localhost
+DATABASE_URL="mysql://root:aluno@localhost:3306/mypass"
+SECRET_KEY="S1OZ4AXeqOPbAKtnHSaDqWrxuTKiXkHfbzz8uM5TcO5BKkBmrJ"
+
