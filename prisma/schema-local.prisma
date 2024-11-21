@@ -26,7 +26,7 @@ model user {
   email      String    @unique @db.VarChar(200)
   pass       String    @db.VarChar(256)
   avatar     String?   @db.VarChar(1000)
-  birth_date DateTime @db.Date
+  birth_date DateTime? @db.Date
   account    account[]
   session    session[]
 }
