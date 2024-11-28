@@ -1,32 +1,33 @@
-import { getByIdAccount, accountValidateId } from "../../models/accountModel.js"
+import { getByIdRecipe, recipeValidateId } from "../../models/recipeModel.js";
 
 const getById = async (req, res, next) => {
-  // const id = req.params.id
-  
   try {
-    const { id } = req.params
-    const accountValidated = accountValidateId(+id)
+    const { id } = req.params;
 
-    if (accountValidated?.error)
+    // Valida o ID da receita
+    const recipeValidated = recipeValidateId(+id);
+
+    if (recipeValidated?.error)
       return res.status(401).json({
-        error: "Erro ao buscar um serviço!",
-        fieldErrors: accountValidated.error.flatten().fieldErrors
-      })
+        error: "Erro ao buscar a receita!",
+        fieldErrors: recipeValidated.error.flatten().fieldErrors,
+      });
 
-    const account = await getByIdAccount(accountValidated.data.id, req.userLogged.public_id)
+    // Busca a receita pelo ID e pelo usuário logado
+    const recipe = await getByIdRecipe(recipeValidated.data.id, req.userLogged.public_id);
 
-    if (!account)
+    if (!recipe)
       return res.status(404).json({
-        error: `Conta com o id ${id}, não encontrado!`
-      })
+        error: `Receita com o id ${id} não encontrada!`,
+      });
 
     return res.json({
-      success: "Conta encontrada com sucesso!",
-      account
-    })
+      success: "Receita encontrada com sucesso!",
+      recipe,
+    });
   } catch (error) {
-    next(error)
+    next(error);
   }
-}
+};
 
-export default getById
+export default getById;

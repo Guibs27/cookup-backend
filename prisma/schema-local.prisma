@@ -7,16 +7,26 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model account {
-  id         Int     @id @default(autoincrement())
-  service    String  @db.VarChar(255)
-  username   String  @db.VarChar(255)
-  logo_image String? @db.VarChar(1000)
-  pass       String  @db.VarChar(500)
-  user_id    Int
-  user       user    @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "account_ibfk_1")
+model recipes {
+  id            Int       @id @default(autoincrement())
+  recipe_image  String?   @db.VarChar(1000) // Opcional para permitir que a receita não tenha imagem
+  title         String    @db.VarChar(255)
+  ingredients   String    @db.Text         // Text para permitir grandes quantidades de texto
+  step_by_step  String    @db.Text         // Text para instruções detalhadas
+  comment       String?   @db.Text         // Opcional para comentários adicionais
+  category_id   Int
+  category      categories @relation(fields: [category_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "recipes_category_fk")
+  user_id       Int
+  user          user      @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "recipes_user_fk")
 
+  @@index([category_id], map: "category_id")
   @@index([user_id], map: "user_id")
+}
+
+model categories {
+  id          Int       @id @default(autoincrement())
+  name        String    @unique @db.VarChar(100) // Nome da categoria de prato/receita
+  recipes     recipes[] // Relacionamento com a tabela recipes
 }
 
 model user {
@@ -27,8 +37,8 @@ model user {
   pass       String    @db.VarChar(256)
   avatar     String?   @db.VarChar(1000)
   birth_date DateTime? @db.Date
-  account    account[]
-  session    session[]
+  recipes    recipes[] // Relacionamento com a tabela recipes
+  session    session[] 
 }
 
 model session {

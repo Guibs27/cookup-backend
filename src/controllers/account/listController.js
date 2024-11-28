@@ -1,15 +1,17 @@
-import { listAccounts } from "../../models/accountModel.js"
+import { listRecipes } from "../../models/recipeModel.js";
 
 const list = async (req, res, next) => {
   try {
-    const accounts = await listAccounts(req.userLogged.public_id)
-    return res.json({
-      message: "Contas listadas com sucesso!",
-      accounts
-    })
-  } catch (error) {
-    next(error)
-  }
-}
+    // Obtém as receitas do usuário logado
+    const recipes = await listRecipes(req.userLogged.public_id);
 
-export default list
+    return res.json({
+      message: "Receitas listadas com sucesso!",
+      recipes,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export default list;

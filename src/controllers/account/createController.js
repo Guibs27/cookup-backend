@@ -1,39 +1,45 @@
-import { create, accountValidateToCreate } from "../../models/accountModel.js"
-import { getByPublicId } from "../../models/userModel.js"
+import { create, recipeValidateToCreate } from "../../models/recipeModel.js";
+import { getByPublicId } from "../../models/userModel.js";
 
 const createController = async (req, res, next) => {
   try {
-    const account = req.body
-    const accountValidated = accountValidateToCreate(account)
+    const recipe = req.body;
 
-    if (accountValidated?.error)
+    // Validação dos dados da receita
+    const recipeValidated = recipeValidateToCreate(recipe);
+
+    if (recipeValidated?.error)
       return res.status(401).json({
-        error: "Erro ao criar conta!",
-        fieldErrors: accountValidated.error.flatten().fieldErrors
-      })
+        error: "Erro ao criar receita!",
+        fieldErrors: recipeValidated.error.flatten().fieldErrors,
+      });
 
-    const user = await getByPublicId(req.userLogged.public_id)
+    // Recupera o usuário logado pelo `public_id`
+    const user = await getByPublicId(req.userLogged.public_id);
 
     if (!user)
       return res.status(401).json({
-        error: "Public ID Inválido!"
-      })
+        error: "Public ID Inválido!",
+      });
 
-    accountValidated.data.user_id = user.id
-    const result = await create(accountValidated.data)
+    // Associa o ID do usuário à receita validada
+    recipeValidated.data.user_id = user.id;
+
+    // Cria a nova receita
+    const result = await create(recipeValidated.data);
 
     if (!result)
       return res.status(401).json({
-        error: "Erro ao criar conta!"
-      })
+        error: "Erro ao criar receita!",
+      });
 
     return res.json({
-      success: "Conta criada com sucesso!",
-      account: result
-    })
+      success: "Receita criada com sucesso!",
+      recipe: result,
+    });
   } catch (error) {
-    next(error)
+    next(error);
   }
-}
+};
 
-export default createController
+export default createController;

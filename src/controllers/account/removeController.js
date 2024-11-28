@@ -1,30 +1,34 @@
-import { deleteAccount, accountValidateId } from "../../models/accountModel.js"
+import { deleteRecipe, recipeValidateId } from "../../models/recipeModel.js";
 
 const remove = async (req, res, next) => {
-  const { id } = req.params
-  
+  const { id } = req.params;
+
   try {
-    const accountValidated = accountValidateId(+id)
+    // Valida o ID da receita
+    const recipeValidated = recipeValidateId(+id);
 
-    if (accountValidated?.error)
+    if (recipeValidated?.error)
       return res.status(401).json({
-        error: "Erro ao deletar um serviço!",
-        fieldErrors: accountValidated.error.flatten().fieldErrors
-      })
+        error: "Erro ao deletar uma receita!",
+        fieldErrors: recipeValidated.error.flatten().fieldErrors,
+      });
 
-    const account = await deleteAccount(accountValidated.data.id, req.userLogged.public_id)
+    // Remove a receita correspondente ao usuário logado
+    const recipe = await deleteRecipe(recipeValidated.data.id, req.userLogged.public_id);
 
     return res.json({
-      success: "Conta removida com sucesso!",
-      account
-    })
+      success: "Receita removida com sucesso!",
+      recipe,
+    });
   } catch (error) {
-    if (error?.code === 'P2025')
+    // Verifica se a receita não foi encontrada
+    if (error?.code === "P2025")
       return res.status(404).json({
-        error: `Conta com o id ${id}, não encontrado!`
-      })
-    next(error)
-  }
-}
+        error: `Receita com o id ${id}, não encontrada!`,
+      });
 
-export default remove
+    next(error);
+  }
+};
+
+export default remove;
