@@ -1,4 +1,4 @@
-import { userValidateToLogin, getByEmail} from "../../models/userModel.js"
+import { userValidateToLogin, getByEmail } from "../../models/userModel.js"
 import { createSession } from "../../models/sessionModel.js"
 import jwt from 'jsonwebtoken'
 import bcrypt from "bcrypt"
@@ -6,58 +6,58 @@ import { SECRET_KEY } from "../../config.js"
 import dayjs from 'dayjs'
 
 const login = async (req, res, next) => {
-    try{
-        // recebe os dados de login (email e senha)
-        const login = req.body
+  try {
+    // Recebe os dados de login (email e senha)
+    const login = req.body
 
-        // valida se os campos passam pelas regras de negócio
-        const loginValidated = userValidateToLogin(login)
-        if(loginValidated?.error)
-            return res.status(401).json({
-                error: "Erro ao logar! (dados de entrada inválidos)",
-            })
-  
-        // separa as campos validados
-        const {email, pass} = loginValidated.data
-        
-        // busca o usuário no bd pelo email para comparar as senhas
-        const user = await getByEmail(email)
+    // Valida se os campos passam pelas regras de negócio
+    const loginValidated = userValidateToLogin(login)
+    if (loginValidated?.error)
+      return res.status(401).json({
+        error: "Erro ao logar! (dados de entrada inválidos)",
+      })
 
-        if(!user)
-            return res.status(401).json({
-                error: "Email ou senha inválida! (email não encontrado)",
-            })
+    // Separa as campos validados
+    const { email, pass } = loginValidated.data
 
-        // comparo a senha com o hash do user cadastrado no bd
-        const passIsValid = bcrypt.compareSync(pass, user.pass)
+    // Busca o usuário no bd pelo email para comparar as senhas
+    const user = await getByEmail(email)
 
-        if(!passIsValid)
-            return res.status(401).json({
-                error: "Email ou senha inválida! (senha não bate com hash)",
-            })
+    if (!user)
+      return res.status(401).json({
+        error: "Email ou senha inválida! (email não encontrado)",
+      })
 
-        // gero o token de acesso
-        const token = jwt.sign({public_id: user.public_id, name: user.name }, SECRET_KEY, { expiresIn: 60 * 5 })
+    // Compara a senha com o hash do user cadastrado no bd
+    const passIsValid = bcrypt.compareSync(pass, user.pass)
 
-        // salvar o token gerado na sessão (bd)
-        await createSession(user.id, token)
+    if (!passIsValid)
+      return res.status(401).json({
+        error: "Email ou senha inválida! (senha não bate com hash)",
+      })
 
-        //devolver o token de acesso para o usuário
-        return res.json({
-            success: "Login realizado com sucesso!",
-            accessToken: token,
-            user: {
-                public_id: user.public_id,
-                name: user.name,
-                avatar: user.avatar,
-                email: user.email,
-                birth_date: dayjs(user.birth_date).format("DD/MM/YYYY")
-            }
-        })
-        
-    } catch(error) {
-        next(error)
-    }
+    // Gera o token de acesso
+    const token = jwt.sign({ public_id: user.public_id, name: user.name }, SECRET_KEY, { expiresIn: 60 * 5 })
+
+    // Salva o token gerado na sessão (bd)
+    await createSession(user.id, token)
+
+    // Devolve o token de acesso para o usuário
+    return res.json({
+      success: "Login realizado com sucesso!",
+      accessToken: token,
+      user: {
+        public_id: user.public_id,
+        name: user.name,
+        avatar: user.avatar,
+        email: user.email,
+        birth_date: dayjs(user.birth_date).format("DD/MM/YYYY")
+      }
+    })
+
+  } catch (error) {
+    next(error)
+  }
 }
 
 export default login
