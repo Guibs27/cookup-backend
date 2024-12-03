@@ -65,7 +65,7 @@ export const recipeValidateId = (id) => {
 
 // Listar todas as receitas de um usuário
 export const listRecipes = async (public_id) => {
-  const recipes = await prisma.recipe.findMany({
+  const recipes = await prisma.recipes.findMany({
     orderBy: {
       id: 'desc'
     },
@@ -80,7 +80,7 @@ export const listRecipes = async (public_id) => {
 
 // Obter uma receita pelo ID
 export const getByIdRecipe = async (id, public_id) => {
-  const recipe = await prisma.recipe.findUnique({
+  const recipe = await prisma.recipes.findUnique({
     where: {
       id,
       user: {
@@ -93,7 +93,7 @@ export const getByIdRecipe = async (id, public_id) => {
 
 // Criar uma nova receita
 export const create = async (recipe) => {
-  const result = await prisma.recipe.create({
+  const result = await prisma.recipes.create({
     data: recipe
   })
   return result
@@ -101,7 +101,7 @@ export const create = async (recipe) => {
 
 // Deletar uma receita
 export const deleteRecipe = async (id, public_id) => {
-  const recipe = await prisma.recipe.delete({
+  const recipe = await prisma.recipes.delete({
     where: {
       id: id,
       user: {
@@ -114,7 +114,7 @@ export const deleteRecipe = async (id, public_id) => {
 
 // Atualizar receita
 export const update = async (recipe, public_id) => {
-  const result = await prisma.recipe.update({
+  const result = await prisma.recipes.update({
     data: recipe,
     where: {
       id: recipe.id,

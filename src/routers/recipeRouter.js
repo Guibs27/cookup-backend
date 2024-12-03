@@ -3,14 +3,10 @@ import createController from '../controllers/recipe/createController.js';
 import getByIdController from '../controllers/recipe/getByIdController.js'; 
 import listController from '../controllers/recipe/listController.js'; 
 import updateController from '../controllers/recipe/updateController.js'; 
-import removeController from '../controllers/recipe/removeController.js';
-import uploadImage from '../middlewares/uploadImage.js'; 
+import removeController from '../controllers/recipe/removeController.js'; 
 import { auth } from '../middlewares/auth.js';
 
 const router = express.Router();
-
-// Adiciona o middleware de upload na rota de criação de receitas
-router.post('/', uploadImage.single('image'), createController);
 
 router.use(auth);
 router.post('/', createController);

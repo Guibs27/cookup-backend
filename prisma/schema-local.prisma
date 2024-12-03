@@ -9,11 +9,11 @@ datasource db {
 
 model recipes {
   id            Int       @id @default(autoincrement())
-  recipe_image  String?   @db.VarChar(1000) // Opcional para permitir que a receita não tenha imagem
+  recipe_image  String?   @db.VarChar(1000)
   title         String    @db.VarChar(255)
-  ingredients   String    @db.Text         // Text para permitir grandes quantidades de texto
-  step_by_step  String    @db.Text         // Text para instruções detalhadas
-  comment       String?   @db.Text         // Opcional para comentários adicionais
+  ingredients   String    @db.Text
+  step_by_step  String    @db.Text
+  comment       String?   @db.Text
   category_id   Int
   category      categories @relation(fields: [category_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "recipes_category_fk")
   user_id       Int
