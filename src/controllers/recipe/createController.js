@@ -3,6 +3,7 @@ import { getByPublicId } from "../../models/userModel.js";
 
 const createController = async (req, res, next) => {
   try {
+    console.log("Dados recebidos no req.body:", req.body);
     const recipe = req.body;
 
     // Validação dos dados da receita
