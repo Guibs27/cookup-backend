@@ -1,13 +1,15 @@
 import express from 'express';
-import catCreateController from '../controllers/category/catCreateController';
-import catListController from '../controllers/category/catListController';
-import catUpdateController from '../controllers/category/catUpdateController';
-import catRemoveController from '../controllers/category/catRemoveController';
+import { auth } from '../middlewares/auth.js';
+import catCreateController from '../controllers/category/catCreateController.js';
+import catListController from '../controllers/category/catListController.js';
+import catUpdateController from '../controllers/category/catUpdateController.js';
+import catRemoveController from '../controllers/category/catRemoveController.js';
 
 const router = express.Router();
+router.use(auth);
 
 router.post('/', catCreateController);
-router.get('/', catListController);
+router.get('/list', catListController);
 router.put('/:id', catUpdateController);
 router.delete('/:id', catRemoveController);
 

@@ -56,6 +56,18 @@ export const recipeValidateToUpdate = (recipe) => {
   return partialRecipeSchema.safeParse(recipe)
 }
 
+// Validação de ID da receita
+export const recipeValidateId = (id) => {
+  const partialRecipeSchema = recipeSchema.partial({
+    title: true,
+    ingredients: true,
+    step_by_step: true,
+    recipe_image: true,
+    user_id: true
+  })
+  return partialRecipeSchema.safeParse({ id })
+}
+
 // Listar todas as receitas de um usuário
 export const listRecipes = async (public_id) => {
   const recipes = await prisma.recipes.findMany({
@@ -68,22 +80,51 @@ export const listRecipes = async (public_id) => {
       }
     },
     include: {
-      category: true // Inclui as informações da categoria associada
+      category: true
     }
   });
   return recipes;
 }
 
+// Obter uma receita pelo ID
+export const getByIdRecipe = async (id, public_id) => {
+  const recipe = await prisma.recipes.findFirst({
+    where: {
+      id: id,
+      user: {
+        public_id
+      }
+    },
+    include: {
+      category: true 
+    }
+  });
+  return recipe;
+};
+
 // Criar uma nova receita
-export const create = async (recipe) => {
+export const createRecipe = async (recipe) => {
   const result = await prisma.recipes.create({
     data: recipe
   })
   return result
 }
 
+// Deletar uma receita
+export const deleteRecipe = async (id, public_id) => {
+  const recipe = await prisma.recipes.delete({
+    where: {
+      id: id,
+      user: {
+        public_id
+      }
+    }
+  })
+  return recipe
+}
+
 // Atualizar receita
-export const update = async (recipe, public_id) => {
+export const updateRecipe = async (recipe, public_id) => {
   const result = await prisma.recipes.update({
     data: recipe,
     where: {

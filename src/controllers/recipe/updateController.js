@@ -1,4 +1,4 @@
-import { update, recipeValidateToUpdate } from "../../models/recipeModel.js";
+import { updateRecipe, recipeValidateToUpdate } from "../../models/recipeModel.js";
 import { getByPublicId } from "../../models/userModel.js";
 
 const updateController = async (req, res, next) => {
@@ -28,7 +28,7 @@ const updateController = async (req, res, next) => {
     recipeValidated.data.user_id = user.id;
 
     // Atualiza a receita
-    const result = await update(recipeValidated.data, req.userLogged.public_id);
+    const result = await updateRecipe(recipeValidated.data, req.userLogged.public_id);
 
     if (!result)
       return res.status(401).json({

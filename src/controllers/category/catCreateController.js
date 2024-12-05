@@ -3,6 +3,13 @@ import { getByPublicId } from "../../models/userModel.js";
 
 const catCreateController = async (req, res, next) => {
   try {
+    console.log("Usuário logado:", req.userLogged);
+    const { public_id } = req.userLogged;
+
+    // Certifique-se de que o usuário logado existe
+    if (!public_id) {
+      return res.status(401).json({ error: "Usuário não autenticado!" });
+    }
     const category = req.body;
 
     // Validação dos dados da categoria

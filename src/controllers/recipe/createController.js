@@ -1,4 +1,4 @@
-import { create, recipeValidateToCreate } from "../../models/recipeModel.js";
+import { createRecipe, recipeValidateToCreate } from "../../models/recipeModel.js";
 import { getByPublicId } from "../../models/userModel.js";
 
 const createController = async (req, res, next) => {
@@ -27,7 +27,7 @@ const createController = async (req, res, next) => {
     recipeValidated.data.user_id = user.id;
 
     // Cria a nova receita
-    const result = await create(recipeValidated.data);
+    const result = await createRecipe(recipeValidated.data);
 
     if (!result)
       return res.status(401).json({

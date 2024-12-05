@@ -24,9 +24,13 @@ model recipes {
 }
 
 model categories {
-  id          Int       @id @default(autoincrement())
-  name        String    @unique @db.VarChar(100) // Nome da categoria de prato/receita
-  recipes     recipes[] // Relacionamento com a tabela recipes
+  id        Int       @id @default(autoincrement())
+  name      String    @db.VarChar(255)
+  user_id   Int
+  user      user      @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  recipes   recipes[] // Relacionamento com receitas
+
+  @@index([user_id], map: "categories_user_id_idx")
 }
 
 model user {
@@ -39,6 +43,8 @@ model user {
   birth_date DateTime? @db.Date
   recipes    recipes[] // Relacionamento com a tabela recipes
   session    session[] 
+
+  categories categories[]
 }
 
 model session {
