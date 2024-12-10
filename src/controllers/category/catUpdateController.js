@@ -8,7 +8,6 @@ const catUpdateController = async (req, res, next) => {
     const category = req.body;
     category.id = +id;
 
-    // Valida os dados da categoria
     const categoryValidated = categoryValidateToUpdate(category);
 
     if (categoryValidated?.error)
@@ -17,7 +16,6 @@ const catUpdateController = async (req, res, next) => {
         fieldErrors: categoryValidated.error.flatten().fieldErrors,
       });
 
-    // Busca o usuário pelo public_id
     const user = await getByPublicId(req.userLogged.public_id);
 
     if (!user)
@@ -27,7 +25,6 @@ const catUpdateController = async (req, res, next) => {
 
     categoryValidated.data.user_id = user.id;
 
-    // Atualiza a categoria
     const result = await updateCategory(categoryValidated.data);
 
     if (!result)

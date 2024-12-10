@@ -6,13 +6,11 @@ const catCreateController = async (req, res, next) => {
     console.log("Usuário logado:", req.userLogged);
     const { public_id } = req.userLogged;
 
-    // Certifique-se de que o usuário logado existe
     if (!public_id) {
       return res.status(401).json({ error: "Usuário não autenticado!" });
     }
     const category = req.body;
 
-    // Validação dos dados da categoria
     const categoryValidated = categoryValidateToCreate(category);
 
     if (categoryValidated?.error)
@@ -21,7 +19,6 @@ const catCreateController = async (req, res, next) => {
         fieldErrors: categoryValidated.error.flatten().fieldErrors,
       });
 
-    // Recupera o usuário logado pelo `public_id`
     const user = await getByPublicId(req.userLogged.public_id);
 
     if (!user)
@@ -29,10 +26,8 @@ const catCreateController = async (req, res, next) => {
         error: "Public ID Inválido!",
       });
 
-    // Associa o ID do usuário à categoria
     categoryValidated.data.user_id = user.id;
 
-    // Cria a nova categoria
     const result = await createCategory(categoryValidated.data);
 
     if (!result)

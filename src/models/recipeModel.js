@@ -44,19 +44,16 @@ const recipeSchema = z.object({
     .positive({ message: "O category_id deve ser um número positivo maior que 0." })
 });
 
-// Validação para criação de receita
 export const recipeValidateToCreate = (recipe) => {
   const partialRecipeSchema = recipeSchema.partial({ id: true, user_id: true })
   return partialRecipeSchema.safeParse(recipe)
 }
 
-// Validação para atualizar receita
 export const recipeValidateToUpdate = (recipe) => {
   const partialRecipeSchema = recipeSchema.partial({ user_id: true })
   return partialRecipeSchema.safeParse(recipe)
 }
 
-// Validação de ID da receita
 export const recipeValidateId = (id) => {
   const partialRecipeSchema = recipeSchema.partial({
     title: true,
@@ -68,7 +65,6 @@ export const recipeValidateId = (id) => {
   return partialRecipeSchema.safeParse({ id })
 }
 
-// Listar todas as receitas de um usuário
 export const listRecipes = async (public_id) => {
   const recipes = await prisma.recipes.findMany({
     orderBy: {
@@ -86,7 +82,6 @@ export const listRecipes = async (public_id) => {
   return recipes;
 }
 
-// Obter uma receita pelo ID
 export const getByIdRecipe = async (id, public_id) => {
   const recipe = await prisma.recipes.findFirst({
     where: {
@@ -102,7 +97,6 @@ export const getByIdRecipe = async (id, public_id) => {
   return recipe;
 };
 
-// Criar uma nova receita
 export const createRecipe = async (recipe) => {
   const result = await prisma.recipes.create({
     data: recipe
@@ -110,7 +104,6 @@ export const createRecipe = async (recipe) => {
   return result
 }
 
-// Deletar uma receita
 export const deleteRecipe = async (id, public_id) => {
   const recipe = await prisma.recipes.delete({
     where: {
@@ -123,7 +116,6 @@ export const deleteRecipe = async (id, public_id) => {
   return recipe
 }
 
-// Atualizar receita
 export const updateRecipe = async (recipe, public_id) => {
   const result = await prisma.recipes.update({
     data: recipe,

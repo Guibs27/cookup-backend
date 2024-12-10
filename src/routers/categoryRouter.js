@@ -1,9 +1,9 @@
 import express from 'express';
-import { auth } from '../middlewares/auth.js';
 import catCreateController from '../controllers/category/catCreateController.js';
 import catListController from '../controllers/category/catListController.js';
 import catUpdateController from '../controllers/category/catUpdateController.js';
 import catRemoveController from '../controllers/category/catRemoveController.js';
+import { auth } from '../middlewares/auth.js';
 
 const router = express.Router();
 router.use(auth);
