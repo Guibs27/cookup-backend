@@ -8,7 +8,6 @@ const updateController = async (req, res, next) => {
     const recipe = req.body;
     recipe.id = +id;
 
-    // Valida os dados da receita
     const recipeValidated = recipeValidateToUpdate(recipe);
 
     if (recipeValidated?.error)
@@ -17,7 +16,6 @@ const updateController = async (req, res, next) => {
         fieldErrors: recipeValidated.error.flatten().fieldErrors,
       });
 
-    // Busca o usuário pelo public_id
     const user = await getByPublicId(req.userLogged.public_id);
 
     if (!user)
@@ -27,7 +25,6 @@ const updateController = async (req, res, next) => {
 
     recipeValidated.data.user_id = user.id;
 
-    // Atualiza a receita
     const result = await updateRecipe(recipeValidated.data, req.userLogged.public_id);
 
     if (!result)

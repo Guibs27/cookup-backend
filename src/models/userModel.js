@@ -1,7 +1,7 @@
-import { PrismaClient } from '@prisma/client'
-import { z } from 'zod'
+import { PrismaClient } from '@prisma/client';
+import { z } from 'zod';
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
 
 const accountSchema = z.object({
   id: z.number({
@@ -42,49 +42,56 @@ const accountSchema = z.object({
     invalid_type_error: 'A data de nascimento deve ser um string "aaaa-mm-dd".',
     required_error: "A data de nascimento é obrigatória."
   })
-
-})
+});
 
 export const userValidateToCreate = (account) => {
-  const partialAccountSchema = accountSchema.partial({ id: true, public_id: true })
-  return partialAccountSchema.safeParse(account)
-}
+  const partialAccountSchema = accountSchema.partial({ id: true, public_id: true });
+  return partialAccountSchema.safeParse(account);
+};
 
 export const userValidateToLogin = (account) => {
-  const partialAccountSchema = accountSchema.partial({ id: true, public_id: true, avatar: true, name: true, birth_date: true })
-  return partialAccountSchema.safeParse(account)
-}
+  const partialAccountSchema = accountSchema.partial({ id: true, public_id: true, avatar: true, name: true, birth_date: true });
+  return partialAccountSchema.safeParse(account);
+};
+
+export const userValidateToUpdate = (account) => {
+  const partialAccountSchema = accountSchema.partial({ id: true, public_id: true, pass: true });
+  return partialAccountSchema.safeParse(account);
+};
 
 export const getByPublicId = async (public_id) => {
-  const user = await prisma.user.findUnique({
-    where: {
-      public_id
-    }
-  })
-  return user
-}
+  return await prisma.user.findUnique({
+    where: { public_id },
+  });
+};
 
 export const getById = async (id) => {
-  const user = await prisma.user.findUnique({
-    where: {
-      id
-    }
-  })
-  return user
-}
+  return await prisma.user.findUnique({
+    where: { id },
+  });
+};
 
 export const getByEmail = async (email) => {
-  const user = await prisma.user.findUnique({
-    where: {
-      email
-    }
-  })
-  return user
-}
+  return await prisma.user.findUnique({
+    where: { email },
+  });
+};
 
 export const signUp = async (user) => {
-  const result = await prisma.user.create({
-    data: user
-  })
-  return result
-}
+  return await prisma.user.create({
+    data: user,
+  });
+};
+
+export const updateUser = async (public_id, data) => {
+  return await prisma.user.update({
+    where: { public_id },
+    data,
+  });
+};
+
+export const deleteUser = async (public_id) => {
+  return await prisma.user.delete({
+    where: { public_id },
+  });
+};

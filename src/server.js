@@ -3,6 +3,7 @@ import cors from 'cors';
 import authRouter from './routers/authRouter.js';
 import categoryRouter from './routers/categoryRouter.js';
 import recipeRouter from './routers/recipeRouter.js';
+import userRouter from "./routers/userRouter.js";
 import errorHandler from './middlewares/errorHandler.js';
 import welcome from './controllers/welcome.js';
 import logger from './middlewares/logger.js';
@@ -18,6 +19,7 @@ app.get('/', welcome);
 app.use('/auth', authRouter);
 app.use('/category', categoryRouter);
 app.use('/recipe', recipeRouter);
+app.use("/user", userRouter);
 
 app.use(errorHandler);
 
