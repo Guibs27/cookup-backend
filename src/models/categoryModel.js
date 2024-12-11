@@ -59,13 +59,16 @@ export const createCategory = async (category) => {
 };
 
 export const updateCategory = async (id, data) => {
-  const result = await prisma.categories.update({
-    where: {
-      id,
-    },
-    data,
-  });
-  return result;
+  try {
+    const updatedCategory = await prisma.categories.update({
+      where: { id }, 
+      data,
+    });
+    return updatedCategory;
+  } catch (error) {
+    console.error("Erro ao atualizar categoria:", error);
+    throw error;
+  }
 };
 
 export const deleteCategory = async (id) => {

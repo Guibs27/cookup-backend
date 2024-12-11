@@ -6,7 +6,6 @@ const createController = async (req, res, next) => {
     console.log("Dados recebidos no req.body:", req.body);
     const recipe = req.body;
 
-    // Validação dos dados da receita
     const recipeValidated = recipeValidateToCreate(recipe);
 
     if (recipeValidated?.error)
@@ -15,7 +14,6 @@ const createController = async (req, res, next) => {
         fieldErrors: recipeValidated.error.flatten().fieldErrors,
       });
 
-    // Recupera o usuário logado pelo `public_id`
     const user = await getByPublicId(req.userLogged.public_id);
 
     if (!user)
@@ -23,10 +21,8 @@ const createController = async (req, res, next) => {
         error: "Public ID Inválido!",
       });
 
-    // Associa o ID do usuário à receita validada
     recipeValidated.data.user_id = user.id;
 
-    // Cria a nova receita
     const result = await createRecipe(recipeValidated.data);
 
     if (!result)

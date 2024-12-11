@@ -7,7 +7,7 @@ const userUpdateController = async (req, res, next) => {
 
   try {
     if (userData.birth_date) {
-      const formattedDate = dayjs(userData.birth_date, "DD/MM/YYYY").toISOString();  // Converte para ISO-8601
+      const formattedDate = dayjs(userData.birth_date, "DD/MM/YYYY").toISOString();
 
       if (!dayjs(formattedDate).isValid()) {
         return res.status(400).json({

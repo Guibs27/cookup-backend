@@ -5,42 +5,47 @@ const catUpdateController = async (req, res, next) => {
   const { id } = req.params;
 
   try {
-    const category = req.body;
-    category.id = +id;
+    const category = req.body; 
+    category.id = +id; 
 
     const categoryValidated = categoryValidateToUpdate(category);
 
-    if (categoryValidated?.error)
+    if (categoryValidated?.error) {
       return res.status(401).json({
         error: "Erro ao atualizar a categoria!",
         fieldErrors: categoryValidated.error.flatten().fieldErrors,
       });
+    }
 
     const user = await getByPublicId(req.userLogged.public_id);
 
-    if (!user)
+    if (!user) {
       return res.status(401).json({
         error: "Public ID Inválido!",
       });
+    }
 
     categoryValidated.data.user_id = user.id;
 
-    const result = await updateCategory(categoryValidated.data);
+    const updatedCategory = await updateCategory(parseInt(id), categoryValidated.data);
 
-    if (!result)
+    if (!updatedCategory) {
       return res.status(401).json({
         error: "Erro ao atualizar a categoria!",
       });
+    }
 
-    return res.json({
+    return res.status(200).json({
       success: "Categoria atualizada com sucesso!",
-      category: result,
+      category: updatedCategory,
     });
   } catch (error) {
-    if (error?.code === "P2025")
+    if (error?.code === "P2025") {
       return res.status(404).json({
-        error: `Categoria com o id ${id}, não encontrada!`,
+        error: `Categoria com o id ${id} não encontrada!`,
       });
+    }
+
     next(error);
   }
 };

@@ -18,7 +18,6 @@ const remove = async (req, res, next) => {
   const { id } = req.params;
 
   try {
-    // Valida o ID da receita
     const recipeValidated = validateRecipeId(id);
 
     if (recipeValidated?.error) {
@@ -28,7 +27,6 @@ const remove = async (req, res, next) => {
       });
     }
 
-    // Remove a receita correspondente ao usuário logado
     const recipe = await deleteRecipe(recipeValidated.data.id, req.userLogged.public_id);
 
     if (!recipe) {
