@@ -41,7 +41,8 @@ const recipeSchema = z.object({
     invalid_type_error: "O category_id deve ser um valor numérico.",
     required_error: "O category_id é obrigatório."
   })
-    .positive({ message: "O category_id deve ser um número positivo maior que 0." })
+    .positive({ message: "O category_id deve ser um número positivo maior que 0." }),
+  comment: z.string().optional(),
 });
 
 export const recipeValidateToCreate = (recipe) => {
